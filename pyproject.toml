@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "vibelocal"
+version = "0.1.0"
+description = "vibelocal"
+authors = []
+
+[tool.poetry.dependencies]
+python = "^3.9"
+flask = "^2.0.3"
+flask-sqlalchemy = "^3.0"
+flask-marshmallow = "^0.14.0"
+marshmallow-sqlalchemy = "^0.26.1"
+flask-migrate = "^4.0.4"
+pymysql = "^1.0.2"
+python-dotenv = "^1.0.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
