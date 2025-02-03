@@ -117,3 +117,29 @@ def delete_shop(shop_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": f"Error deleting shop: {str(e)}"}), 500
+
+
+# 📌 6. Get a single shop by ID (GET)
+#@app.route("/shops/<int:shop_id>", methods=["GET"])
+def get_shop_by_user_id(user_id):
+    try:
+        shop = Shop.query.filter_by(owner_id=user_id).first()
+        if not shop:
+            return jsonify({"message": "Shop not found"}), 404
+        
+        return jsonify({
+            "shop_id": shop.shop_id,
+            "shop_name": shop.shop_name,
+            "shop_logo": shop.shop_logo,
+            "category": shop.category,
+            "offer": shop.offer,
+            "location": shop.location,
+            "owner_id": shop.owner_id,
+            "phone_number": shop.phone_number,
+            "created_date": shop.created_date,
+            "created_by": shop.created_by,
+            "last_modified_date": shop.last_modified_date,
+            "last_modified_by": shop.last_modified_by
+        }), 200
+    except Exception as e:
+        return jsonify({"message": f"Error fetching shop: {str(e)}"}), 500

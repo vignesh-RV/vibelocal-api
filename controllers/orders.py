@@ -105,3 +105,28 @@ def delete_order(order_id):
         db.session.rollback()
         return jsonify({"message": f"Error deleting order: {str(e)}"}), 500
 
+
+# 📌 6. Get all orders for user (GET)
+#@app.route("/orders", methods=["GET"])
+def get_all_orders_by_user_id(user_id):
+    try:
+        orders = Order.query.filter_by(user_id=user_id).all()
+        if not orders:
+            return jsonify({"message": "No orders found"}), 404
+        
+        orders_list = [
+            {
+                "order_id": order.order_id,
+                "user_id": order.user_id,
+                "final_price": order.final_price,
+                "discount_price": order.discount_price,
+                "payment_details": order.payment_details,
+                "created_date": order.created_date,
+                "created_by": order.created_by,
+                "last_modified_date": order.last_modified_date,
+                "last_modified_by": order.last_modified_by
+            } for order in orders
+        ]
+        return jsonify(orders_list), 200
+    except Exception as e:
+        return jsonify({"message": f"Error fetching orders: {str(e)}"}), 500

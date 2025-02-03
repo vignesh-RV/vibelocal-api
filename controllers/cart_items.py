@@ -98,3 +98,24 @@ def delete_cart_item(cart_item_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"message": f"Error deleting cart item: {str(e)}"}), 500
+
+
+# 📌 6. Delete cart items by ID (POST)
+def delete_cart_items():
+    cartitems = request.json
+    try:
+        cart_item_ids = [p['cart_item_id'] for p in cartitems]
+
+        if not cart_item_ids:
+            return jsonify([]), 200
+    
+        cart_items = CartItem.query.filter(CartItem.cart_item_id.in_(cart_item_ids)).all()
+        if not cart_items:
+            return jsonify({"message": "Cart item not found"}), 404
+
+        db.session.delete(cart_items)
+        db.session.commit()
+        return jsonify({"message": "Cart item deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"message": f"Error deleting cart item: {str(e)}"}), 500

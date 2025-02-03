@@ -8,15 +8,16 @@ from config.db_config import db, OrderProduct
 def create_order_product():
     try:
         data = request.json
-        new_order_product = OrderProduct(
-            order_id=data["order_id"],
-            product_id=data["product_id"],
-            product_price_details=data.get("product_price_details", None),
-            quantity=data["quantity"],
-            created_by=data.get("created_by", -1),
-            last_modified_by=data.get("last_modified_by", -1),
-        )
-        db.session.add(new_order_product)
+        for d in data:
+            new_order_product = OrderProduct(
+                order_id=d["order_id"],
+                product_id=d["product_id"],
+                product_price_details=d.get("product_price_details", None),
+                quantity=d["quantity"],
+                created_by=d.get("created_by", -1),
+                last_modified_by=d.get("last_modified_by", -1),
+            )
+            db.session.add(new_order_product)
         db.session.commit()
         return jsonify({"message": "Order product created successfully", "order_product_id": new_order_product.order_product_id}), 201
     except Exception as e:

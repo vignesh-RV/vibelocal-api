@@ -173,8 +173,8 @@ def get_user_Cart_products(user_id):
     try:
         # product_ids = db.session.query(CartItem.product_id).filter(CartItem.user_id == user_id).all()
         cartitems = [
-            {"cart_item_id": c.cart_item_id, "product_id": c.product_id}
-            for c in CartItem.query.with_entities(CartItem.cart_item_id, CartItem.product_id).filter_by(user_id=user_id).all()
+            {"cart_item_id": c.cart_item_id, "product_id": c.product_id, "quantity": c.quantity}
+            for c in CartItem.query.with_entities(CartItem.cart_item_id, CartItem.product_id, CartItem.quantity).filter_by(user_id=user_id).all()
         ]
 
         product_ids = [p['product_id'] for p in cartitems]
@@ -197,7 +197,8 @@ def get_user_Cart_products(user_id):
                 "created_by": product.created_by,
                 "last_modified_date": product.last_modified_date,
                 "last_modified_by": product.last_modified_by,
-                "cart_item_id": next((d['cart_item_id'] for d in cartitems if d["product_id"] == product.product_id), None)
+                "cart_item_id": next((d['cart_item_id'] for d in cartitems if d["product_id"] == product.product_id), None),
+                "quantity": next((d['quantity'] for d in cartitems if d["product_id"] == product.product_id), None)
             } for product in products
         ]
         
